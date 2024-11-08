@@ -1,6 +1,9 @@
 import  { useQueries, useQuery } from "@tanstack/react-query";
 
 import './App.css'
+import { HeroSection } from "./components/heroSection";
+import { Header } from "./components/header";
+import { MovieCard } from "./components/movieCard";
 
 const API_KEY = '1e5700a2';
 
@@ -54,16 +57,10 @@ function App() {
 	}
 
   return (
-    <>
-			<header>
-				<h1>Movie night</h1>
-				<ul>
-					<li>Specials</li>
-					<li>IMDB</li>
-					<li>About us</li>
-				</ul>
-			</header>
-			<div>
+    <main>
+			<Header />	
+			<HeroSection />	
+			<section className="mt-10 md:grid-cols-2 lg:gap-5 grid grid-cols-1 gap-2">
 				{movieDetailQueries.map((query, index) => {
 					if (query.isLoading) return <p key={index}>Loading details...</p>;
 					if (query.error instanceof Error) return <p key={index}>Error: {query.error.message}</p>;
@@ -71,18 +68,11 @@ function App() {
 					const movie = query.data;
 
 					return (
-						<div key={movie.imdbID} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-							<h2>{movie.Title} ({movie.Year})</h2>
-							<p><strong>Director:</strong> {movie.Director}</p>
-							<p><strong>Writer:</strong> {movie.Writer}</p>
-							<p><strong>Country:</strong> {movie.Country}</p>
-							<p><strong>Plot:</strong> {movie.Plot}</p>
-							<img src={movie.Poster} alt={movie.Title} style={{ width: '100px' }} />
-						</div>
+						<MovieCard key={index} movie={movie} />
 					);
 				})}
-			</div>
-    </>
+			</section>
+    </main>
   )
 }
 
